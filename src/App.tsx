@@ -1,6 +1,8 @@
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
+import { getCookie, setCookie } from "./utils/cookies.ts";
+
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [subscribed, setSubscribed] = React.useState<boolean>(false);
@@ -10,12 +12,26 @@ const App: React.FC = () => {
   React.useEffect(() => {
     if (window.location.hash === "#verified") {
       setVerified(true);
-    }
-    if (window.location.hash === "#error") {
+      scrollToBottom();
+    } else if (window.location.hash === "#error") {
       setError(true);
+      scrollToBottom();
+    } else if (window.location.hash && window.location.hash !== "#") {
+      setCookie("referrer", window.location.hash.slice(1));
     }
     window.location.hash = "";
   }, []);
+
+  const scrollToBottom = () => {
+    window.setTimeout(
+      () =>
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        }),
+      500
+    );
+  };
 
   return (
     <div className="flex h-screen w-full flex-col items-center md:flex-row">
@@ -49,7 +65,7 @@ const App: React.FC = () => {
                 "No Setup Hassle - Just add your existing IMAP/SMTP account and you are good to go.",
             },
           ].map((item, i) => (
-            <li className="mt-4 flex">
+            <li className="mt-4 flex" key={i}>
               <span className="w-10 flex-shrink-0 text-2xl font-bold text-gray-300">
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -78,6 +94,8 @@ const App: React.FC = () => {
                 setSubscribed(false);
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
+                const cookie = getCookie("referrer");
+                cookie && formData.append("referrer", cookie);
                 fetch("/api/submit.php", {
                   method: "POST",
                   body: formData,

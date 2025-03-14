@@ -16,9 +16,10 @@ try {
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS waitlist (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        email VARCHAR(255) UNIQUE NOT NULL,
+        email VARCHAR(255) NOT NULL,
         token VARCHAR(64) NOT NULL,
         confirmed BOOLEAN DEFAULT FALSE,
+        referrer TEXT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
 

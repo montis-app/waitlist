@@ -14,6 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 }
 
 $email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
+$referrer = isset($_POST["referrer"]) ? trim($_POST["referrer"]) : null;
+
 if (!$email) {
     http_response_code(400);
     echo json_encode(["error" => "Invalid email address"]);
@@ -22,19 +24,16 @@ if (!$email) {
 
 try {
     $token = bin2hex(random_bytes(32));
-    $stmt = $pdo->prepare("INSERT INTO waitlist (email, token) VALUES (?, ?) ON DUPLICATE KEY UPDATE token = VALUES(token)");
-    if (!$stmt->execute([$email, $token])) {
-        throw new Exception("Database error while saving email");
-    }
+    $stmt = $pdo->prepare("INSERT INTO waitlist (email, token, referrer) VALUES (?, ?, ?)");
+    $stmt->execute([$email, $token, $referrer]);
 
     sendVerificationEmail($email, $token);
     http_response_code(201);
     echo json_encode(["message" => "Check your email for verification"]);
     exit();
-
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(["error" => $e->getMessage() . ' - ' . $_ENV['SMTP_HOST']]);
+    echo json_encode(["error" => $e->getMessage()]);
     exit();
 }
 
