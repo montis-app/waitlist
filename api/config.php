@@ -4,7 +4,6 @@ require_once 'env.php';
 loadEnv();
 
 try {
-    // Create PDO instance
     $pdo = new PDO(
         "mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";charset=utf8",
         $_ENV['DB_USER'],
@@ -15,7 +14,6 @@ try {
         ]
     );
 
-    // Ensure the table exists
     $pdo->exec("CREATE TABLE IF NOT EXISTS waitlist (
         id INT AUTO_INCREMENT PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,

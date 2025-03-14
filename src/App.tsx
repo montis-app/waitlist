@@ -104,7 +104,7 @@ const App: React.FC = () => {
                   className="w-full rounded-full border border-gray-400 bg-white px-4 py-2 text-lg focus:ring-2 focus:ring-emerald-900 focus:outline-none"
                   type="email"
                   name="email"
-                  placeholder="mail@montis.app"
+                  placeholder="hello@montis.app"
                   required
                 />
               </label>

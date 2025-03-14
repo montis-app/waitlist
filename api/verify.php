@@ -21,7 +21,6 @@ if (isset($_GET["token"])) {
             exit();
         }
 
-
         header("Location: $baseUrl#error");
         exit();
     }

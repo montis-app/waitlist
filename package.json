@@ -6,8 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "react-snap && cp -r api dist/api",
     "lint": "eslint .",
     "preview": "vite preview"
+  },
+  "reactSnap": {
+    "source": "dist"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -29,6 +33,7 @@
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "react-snap": "^1.23.0",
     "tailwindcss": "^4.0.13",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
